@@ -15,6 +15,23 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_punto1_clicked();
+
+    void on_punto2_clicked();
+
+    void on_punto3_clicked();
+
+    void on_punto4_clicked();
+
+    void on_punto5_clicked();
+
+    void on_YC1_slider_sliderMoved(int position);
+
+    void on_XC2_slider_sliderMoved(int position);
+
+    void on_YC2_slider_sliderMoved(int position);
+
 private:
     Ui::MainWindow *ui;
 };
