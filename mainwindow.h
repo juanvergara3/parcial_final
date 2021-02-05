@@ -30,6 +30,9 @@ private: // methods
     void display_shots(std::vector<Shot *> shots);
     void add_shot(Shot* shot);
 
+    void clear_scene();
+    void reset_dials();
+
 public: // methods
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();

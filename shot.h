@@ -20,11 +20,13 @@ public: //variables
     int angle; //angulo inicial del disparo
     float impact_radio; //radio de impacto ya multiplicado por la distancia
 
+    std::string type;
+
 private: //variables
 
 public: //methods
-    Shot(float xi, float yi, float posx, float posy, float vx_, float vy_, int angle_, float final_time, float impact_radio);
-    Shot(int velocity, int angle_);
+    Shot(float xi, float yi, float posx, float posy, float vx_, float vy_, int angle_, float final_time, float impact_radio, std::string type);
+    Shot(int velocity, int angle_, std::string type);
     Shot();
     ~Shot();
 
@@ -54,6 +56,8 @@ public: //methods
     float getVx() const;
 
     float getVy() const;
+
+    std::string getType() const;
 
 private: //methods
 

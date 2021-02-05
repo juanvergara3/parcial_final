@@ -4,8 +4,8 @@
 #include <QObject>
 #include <vector>
 #include <math.h>
-#include <iostream>
 #include <QGraphicsItem>
+#include <QColor>
 #include "shot.h"
 
 #define G 9.81
@@ -23,9 +23,11 @@ private: //variables
     float enemy_impact_radio;
     float distance;
 
+    std::string type;
+
 public: //methods
-    Canyon(float x_, float y_, float imp_);
-    Canyon(float imp_);
+    Canyon(float x_, float y_, float imp_, std::string type);
+    Canyon(float imp_, std::string type);
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
@@ -36,9 +38,6 @@ public: //methods
 
     bool confirm_impact(Canyon *origin, Shot *ofense); //confirma que el diaparo impacta su destino (el cañon que realiza este calculo es el destino (this) )
     bool confirm_impact(Canyon *ofensive, Shot *of, Canyon *defensive, Shot *def);
-
-    void print_results( std::vector <Shot *> shots);
-    void print_results(Shot* shot);
 
     float getPosx() const;
     float getPosy() const;

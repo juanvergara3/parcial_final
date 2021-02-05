@@ -6,8 +6,14 @@ Shot::Shot() {
     V0 = 0;
    angle = 0;
    f_time = 0;
+   this->type = "";
 }
-Shot::Shot(float xi, float yi, float posx, float posy, float vx_, float vy_, int angle_, float final_time, float impact_radio_) {
+std::string Shot::getType() const
+{
+    return type;
+}
+
+Shot::Shot(float xi, float yi, float posx, float posy, float vx_, float vy_, int angle_, float final_time, float impact_radio_, std::string type) {
     x_i = xi;
     y_i = yi;
     x = posx;
@@ -17,7 +23,34 @@ Shot::Shot(float xi, float yi, float posx, float posy, float vx_, float vy_, int
     angle = angle_;
     f_time = final_time;
     impact_radio = impact_radio_;
+    this->type = type;
 }
+Shot::Shot(int velocity, int angle_, std::string type) {
+    V0 = velocity;
+    angle = angle_;
+    this->type = type;
+}
+Shot::~Shot() {
+
+}
+
+QRectF Shot::boundingRect() const {
+    return QRectF(-2, -2, 4, 4);
+}
+void Shot::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+
+    if(type == "d")
+        painter->setPen(QPen(Qt::green,  2, Qt::DotLine));
+    else if(type == "o")
+
+        painter->setPen(QPen(Qt::red,  2, Qt::DotLine));
+
+    painter->drawEllipse(boundingRect().center(), impact_radio, impact_radio);
+    painter->setPen(QPen());
+    painter->setBrush(Qt::black);
+    painter->drawEllipse(boundingRect());
+}
+
 float Shot::getImpact_radio() const
 {
     return impact_radio;
@@ -28,25 +61,6 @@ void Shot::set_end_pos() {
     y = y_i + Vy*f_time -(0.5*G*f_time*f_time);
 
     setPos(x, v_limit - y);
-}
-
-Shot::Shot(int velocity, int angle_) {
-    V0 = velocity;
-    angle = angle_;
-}
-Shot::~Shot() {
-
-}
-
-QRectF Shot::boundingRect() const {
-    return QRectF(-2, -2, 4, 4);
-}
-void Shot::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    painter->setPen(QPen(Qt::green,  2, Qt::DotLine));
-    painter->drawEllipse(boundingRect().center(), impact_radio, impact_radio);
-    painter->setPen(QPen());
-    painter->setBrush(Qt::blue);
-    painter->drawEllipse(boundingRect());
 }
 
 void Shot::setX(float value) {

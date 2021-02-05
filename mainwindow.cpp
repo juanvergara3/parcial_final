@@ -11,8 +11,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->setScene(scene);
     scene->setSceneRect(0, 0, 1900, 720);
 
-    offensive = new Canyon(0.05);
-    defensive = new Canyon(0.025);
+    offensive = new Canyon(0.05, "o");
+    defensive = new Canyon(0.025, "d");
 
     offensive->setPosx(0);
     offensive->setPosy(0);
@@ -46,7 +46,7 @@ void MainWindow::print_shots(std::vector<Shot *> shots) {
         dt = (*k)->getF_time()/10;
 
         for(int w = 1; w < 11; w++){
-            onScreen.push_back(new Shot((*k)->getX_i(), (*k)->getY_i(), (*k)->getX(), (*k)->getY(), (*k)->getVx(), (*k)->getVy(), (*k)->getAngle(), dt*w, (*k)->getImpact_radio()));
+            onScreen.push_back(new Shot((*k)->getX_i(), (*k)->getY_i(), (*k)->getX(), (*k)->getY(), (*k)->getVx(), (*k)->getVy(), (*k)->getAngle(), dt*w, (*k)->getImpact_radio(), (*k)->getType()));
         }
     }
 
@@ -61,7 +61,7 @@ void MainWindow::add_shot(Shot *shot) {
     dt = shot->getF_time()/10;
 
     for(int w = 1; w < 11; w++)
-        onScreen.push_back(new Shot(shot->getX_i(), shot->getY_i(), shot->getX(), shot->getY(), shot->getVx(), shot->getVy(), shot->getAngle(), dt*w, shot->getImpact_radio()));
+        onScreen.push_back(new Shot(shot->getX_i(), shot->getY_i(), shot->getX(), shot->getY(), shot->getVx(), shot->getVy(), shot->getAngle(), dt*w, shot->getImpact_radio(), shot->getType()));
 
     for(auto k = onScreen.begin(); k != onScreen.end(); k++){
         (*k)->set_end_pos();
@@ -70,29 +70,79 @@ void MainWindow::add_shot(Shot *shot) {
 }
 void MainWindow::display_shots(std::vector<Shot *> shots) {
 
-    Shot *one = shots[0], *two = shots[1], *three = shots[2];
+    if(shots.size() == 3){
 
-    ui->angle_lcd1->display(one->getAngle());
-    ui->velocity_lcd1->display(one->getV0());
-    ui->posx_lcd1->display(one->getX());
-    ui->posy_lcd1->display(one->getY());
-    ui->time_lcd1->display(one->getF_time());
+        Shot *one = shots[0], *two = shots[1], *three = shots[2];
 
-    ui->angle_lcd2->display(two->getAngle());
-    ui->velocity_lcd2->display(two->getV0());
-    ui->posx_lcd2->display(two->getX());
-    ui->posy_lcd2->display(two->getY());
-    ui->time_lcd2->display(two->getF_time());
+        ui->angle_lcd1->display(one->getAngle());
+        ui->velocity_lcd1->display(one->getV0());
+        ui->posx_lcd1->display(one->getX());
+        ui->posy_lcd1->display(one->getY());
+        ui->time_lcd1->display(one->getF_time());
 
-    ui->angle_lcd3->display(three->getAngle());
-    ui->velocity_lcd3->display(three->getV0());
-    ui->posx_lcd3->display(three->getX());
-    ui->posy_lcd3->display(three->getY());
-    ui->time_lcd3->display(three->getF_time());
+        ui->angle_lcd2->display(two->getAngle());
+        ui->velocity_lcd2->display(two->getV0());
+        ui->posx_lcd2->display(two->getX());
+        ui->posy_lcd2->display(two->getY());
+        ui->time_lcd2->display(two->getF_time());
+
+        ui->angle_lcd3->display(three->getAngle());
+        ui->velocity_lcd3->display(three->getV0());
+        ui->posx_lcd3->display(three->getX());
+        ui->posy_lcd3->display(three->getY());
+        ui->time_lcd3->display(three->getF_time());
+    }
+    else if(shots.size() == 2){
+
+        Shot *one = shots[0], *two = shots[1];
+
+        ui->angle_lcd1->display(one->getAngle());
+        ui->velocity_lcd1->display(one->getV0());
+        ui->posx_lcd1->display(one->getX());
+        ui->posy_lcd1->display(one->getY());
+        ui->time_lcd1->display(one->getF_time());
+
+        ui->angle_lcd2->display(two->getAngle());
+        ui->velocity_lcd2->display(two->getV0());
+        ui->posx_lcd2->display(two->getX());
+        ui->posy_lcd2->display(two->getY());
+        ui->time_lcd2->display(two->getF_time());
+
+        ui->angle_lcd3->display(0);
+        ui->velocity_lcd3->display(0);
+        ui->posx_lcd3->display(0);
+        ui->posy_lcd3->display(0);
+        ui->time_lcd3->display(0);
+    }
+    else if(shots.size() == 1){
+
+        Shot *one = shots[0];
+
+        ui->angle_lcd1->display(one->getAngle());
+        ui->velocity_lcd1->display(one->getV0());
+        ui->posx_lcd1->display(one->getX());
+        ui->posy_lcd1->display(one->getY());
+        ui->time_lcd1->display(one->getF_time());
+
+        ui->angle_lcd2->display(0);
+        ui->velocity_lcd2->display(0);
+        ui->posx_lcd2->display(0);
+        ui->posy_lcd2->display(0);
+        ui->time_lcd2->display(0);
+
+        ui->angle_lcd3->display(0);
+        ui->velocity_lcd3->display(0);
+        ui->posx_lcd3->display(0);
+        ui->posy_lcd3->display(0);
+        ui->time_lcd3->display(0);
+    }
+    else if(shots.size() == 0){
+
+        reset_dials();
+    }
 }
 
-void MainWindow::on_punto1_clicked() {
-
+void MainWindow::clear_scene() {
     for(auto k = onScreen.begin(); k != onScreen.end(); ){
         scene->removeItem(*k);
         delete (*k);
@@ -100,6 +150,30 @@ void MainWindow::on_punto1_clicked() {
     }
 
     scene->update();
+}
+void MainWindow::reset_dials() {
+    ui->angle_lcd1->display(0);
+    ui->velocity_lcd1->display(0);
+    ui->posx_lcd1->display(0);
+    ui->posy_lcd1->display(0);
+    ui->time_lcd1->display(0);
+
+    ui->angle_lcd2->display(0);
+    ui->velocity_lcd2->display(0);
+    ui->posx_lcd2->display(0);
+    ui->posy_lcd2->display(0);
+    ui->time_lcd2->display(0);
+
+    ui->angle_lcd3->display(0);
+    ui->velocity_lcd3->display(0);
+    ui->posx_lcd3->display(0);
+    ui->posy_lcd3->display(0);
+    ui->time_lcd3->display(0);
+}
+
+void MainWindow::on_punto1_clicked() {
+
+    clear_scene();
 
     std::vector<Shot *> shots = offensive->generate_offensive_shots(defensive);
 
@@ -108,13 +182,7 @@ void MainWindow::on_punto1_clicked() {
 }
 void MainWindow::on_punto2_clicked() {
 
-    for(auto k = onScreen.begin(); k != onScreen.end(); ){
-        scene->removeItem(*k);
-        delete (*k);
-        k = onScreen.erase(k);
-    }
-
-    scene->update();
+    clear_scene();
 
     std::vector<Shot *> shots = defensive->generate_offensive_shots(offensive);
 
@@ -122,13 +190,8 @@ void MainWindow::on_punto2_clicked() {
     print_shots(shots);
 }
 void MainWindow::on_punto3_clicked() {
-    for(auto k = onScreen.begin(); k != onScreen.end(); ){
-        scene->removeItem(*k);
-        delete (*k);
-        k = onScreen.erase(k);
-    }
 
-    scene->update();
+    clear_scene();
 
     Shot *s = offensive->generate_offensive_shots(defensive)[0];
 
@@ -143,13 +206,7 @@ void MainWindow::on_punto3_clicked() {
 }
 void MainWindow::on_punto4_clicked() {
 
-    for(auto k = onScreen.begin(); k != onScreen.end(); ){
-        scene->removeItem(*k);
-        delete (*k);
-        k = onScreen.erase(k);
-    }
-
-    scene->update();
+    clear_scene();
 
     Shot *s = offensive->generate_offensive_shots(defensive)[0];
 
@@ -164,24 +221,25 @@ void MainWindow::on_punto4_clicked() {
 }
 void MainWindow::on_punto5_clicked() {
 
-    for(auto k = onScreen.begin(); k != onScreen.end(); ){
-        scene->removeItem(*k);
-        delete (*k);
-        k = onScreen.erase(k);
-    }
-
-    scene->update();
+    clear_scene();
 
     Shot *of = offensive->generate_offensive_shots(defensive)[0];
     Shot *def = defensive->generate_defensive_shots(offensive, of, false)[0];
 
-    add_shot(of);
-    add_shot(def);
-
     std::vector<Shot *> shots = offensive->generate_counter_offensive_shots(defensive, def, of);
 
-    display_shots(shots);
-    print_shots(shots);
+    if(shots.size() == 0){
+
+        clear_scene();
+        reset_dials();
+    }
+    else{
+        add_shot(of);
+        add_shot(def);
+
+        display_shots(shots);
+        print_shots(shots);
+    }
 }
 
 void MainWindow::on_YC1_slider_sliderMoved(int position) {
