@@ -37,7 +37,7 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::print_results(std::vector<Shot *> shots) {
+void MainWindow::print_shots(std::vector<Shot *> shots) {
 
     float dt;
 
@@ -55,8 +55,7 @@ void MainWindow::print_results(std::vector<Shot *> shots) {
         scene->addItem(*k);
     }
 }
-
-void MainWindow::print_results(Shot *shot) {
+void MainWindow::add_shot(Shot *shot) {
     float dt;
 
     dt = shot->getF_time()/10;
@@ -69,6 +68,28 @@ void MainWindow::print_results(Shot *shot) {
         //scene->addItem(*k);
     }
 }
+void MainWindow::display_shots(std::vector<Shot *> shots) {
+
+    Shot *one = shots[0], *two = shots[1], *three = shots[2];
+
+    ui->angle_lcd1->display(one->getAngle());
+    ui->velocity_lcd1->display(one->getV0());
+    ui->posx_lcd1->display(one->getX());
+    ui->posy_lcd1->display(one->getY());
+    ui->time_lcd1->display(one->getF_time());
+
+    ui->angle_lcd2->display(two->getAngle());
+    ui->velocity_lcd2->display(two->getV0());
+    ui->posx_lcd2->display(two->getX());
+    ui->posy_lcd2->display(two->getY());
+    ui->time_lcd2->display(two->getF_time());
+
+    ui->angle_lcd3->display(three->getAngle());
+    ui->velocity_lcd3->display(three->getV0());
+    ui->posx_lcd3->display(three->getX());
+    ui->posy_lcd3->display(three->getY());
+    ui->time_lcd3->display(three->getF_time());
+}
 
 void MainWindow::on_punto1_clicked() {
 
@@ -80,7 +101,10 @@ void MainWindow::on_punto1_clicked() {
 
     scene->update();
 
-    print_results(offensive->generate_offensive_shots(defensive));
+    std::vector<Shot *> shots = offensive->generate_offensive_shots(defensive);
+
+    display_shots(shots);
+    print_shots(shots);
 }
 void MainWindow::on_punto2_clicked() {
 
@@ -92,7 +116,10 @@ void MainWindow::on_punto2_clicked() {
 
     scene->update();
 
-    print_results(defensive->generate_offensive_shots(offensive));
+    std::vector<Shot *> shots = defensive->generate_offensive_shots(offensive);
+
+    display_shots(shots);
+    print_shots(shots);
 }
 void MainWindow::on_punto3_clicked() {
     for(auto k = onScreen.begin(); k != onScreen.end(); ){
@@ -106,8 +133,12 @@ void MainWindow::on_punto3_clicked() {
     Shot *s = offensive->generate_offensive_shots(defensive)[0];
 
     if(defensive->confirm_impact(offensive, s)){
-        print_results(s);
-        print_results(defensive->generate_defensive_shots(offensive, s, false));
+        add_shot(s);
+
+        std::vector<Shot *> shots = defensive->generate_defensive_shots(offensive, s, false);
+
+        display_shots(shots);
+        print_shots(shots);
     }
 }
 void MainWindow::on_punto4_clicked() {
@@ -123,8 +154,12 @@ void MainWindow::on_punto4_clicked() {
     Shot *s = offensive->generate_offensive_shots(defensive)[0];
 
     if(defensive->confirm_impact(offensive, s)){
-        print_results(s);
-        print_results(defensive->generate_defensive_shots(offensive, s, true));
+        add_shot(s);
+
+        std::vector<Shot *> shots = defensive->generate_defensive_shots(offensive, s, true);
+
+        display_shots(shots);
+        print_shots(shots);
     }
 }
 void MainWindow::on_punto5_clicked() {
@@ -140,10 +175,13 @@ void MainWindow::on_punto5_clicked() {
     Shot *of = offensive->generate_offensive_shots(defensive)[0];
     Shot *def = defensive->generate_defensive_shots(offensive, of, false)[0];
 
-    print_results(of);
-    print_results(def);
+    add_shot(of);
+    add_shot(def);
 
-    print_results(offensive->generate_counter_offensive_shots(defensive, def, of));
+    std::vector<Shot *> shots = offensive->generate_counter_offensive_shots(defensive, def, of);
+
+    display_shots(shots);
+    print_shots(shots);
 }
 
 void MainWindow::on_YC1_slider_sliderMoved(int position) {

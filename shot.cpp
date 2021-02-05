@@ -79,7 +79,10 @@ int Shot::getAngle() const {
 float Shot::getF_time() const {
     return f_time;
 }
-int Shot::getV0() const {
+float Shot::getV0() {
+
+    V0 = sqrt( pow(Vx ,2) + pow(Vy ,2) );
+
     return V0;
 }
 

@@ -24,16 +24,16 @@
      </rect>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>20</y>
+      <x>350</x>
+      <y>30</y>
       <width>82</width>
       <height>146</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="buttons_layout">
      <item>
       <widget class="QPushButton" name="punto1">
        <property name="text">
@@ -71,7 +71,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>41</x>
@@ -80,7 +80,7 @@
       <height>148</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <layout class="QHBoxLayout" name="input_layout">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -317,6 +317,343 @@
           </widget>
          </item>
         </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>10</y>
+      <width>181</width>
+      <height>170</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="display2">
+     <item>
+      <widget class="QLabel" name="shot_label2">
+       <property name="text">
+        <string>Disparo 2:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="angle_layout2">
+       <item>
+        <widget class="QLabel" name="angle_label2">
+         <property name="text">
+          <string>Angulo:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="angle_lcd2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="velocity_layout2">
+       <item>
+        <widget class="QLabel" name="velocity_label2">
+         <property name="text">
+          <string>Velocidad inicial:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="velocity_lcd2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="posx_layout2">
+       <item>
+        <widget class="QLabel" name="posx_label2">
+         <property name="text">
+          <string>Pos X:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="posx_lcd2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="posy_layout2">
+       <item>
+        <widget class="QLabel" name="posy_label2">
+         <property name="text">
+          <string>Pos Y:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="posy_lcd2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="time_layout2">
+       <item>
+        <widget class="QLabel" name="time_label2">
+         <property name="text">
+          <string>Tiempo de vuelo:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="time_lcd2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+         <property name="value" stdset="0">
+          <double>0.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>1060</x>
+      <y>10</y>
+      <width>181</width>
+      <height>170</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="display3">
+     <item>
+      <widget class="QLabel" name="shot_label3">
+       <property name="text">
+        <string>Disparo 3:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="angle_layout3">
+       <item>
+        <widget class="QLabel" name="angle_label3">
+         <property name="text">
+          <string>Angulo:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="angle_lcd3">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="velocity_layout3">
+       <item>
+        <widget class="QLabel" name="velocity_label3">
+         <property name="text">
+          <string>Velocidad inicial:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="velocity_lcd3">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="posx_layout3">
+       <item>
+        <widget class="QLabel" name="posx_label3">
+         <property name="text">
+          <string>Pos X:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="posx_lcd3">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="posy_layout3">
+       <item>
+        <widget class="QLabel" name="posy_label3">
+         <property name="text">
+          <string>Pos Y:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="posy_lcd3">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="time_layout3">
+       <item>
+        <widget class="QLabel" name="time_label3">
+         <property name="text">
+          <string>Tiempo de vuelo:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="time_lcd3">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+         <property name="value" stdset="0">
+          <double>0.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>10</y>
+      <width>191</width>
+      <height>170</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="display1">
+     <item>
+      <widget class="QLabel" name="shot_label1">
+       <property name="text">
+        <string>Disparo 1:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="angle_layout1">
+       <item>
+        <widget class="QLabel" name="angle_label1">
+         <property name="text">
+          <string>Angulo:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="angle_lcd1">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="velocity_layout1">
+       <item>
+        <widget class="QLabel" name="velocity_label1">
+         <property name="text">
+          <string>Velocidad inicial:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="velocity_lcd1">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);
+</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="posx_layout1">
+       <item>
+        <widget class="QLabel" name="posx_label1">
+         <property name="text">
+          <string>Pos X:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="posx_lcd1">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="posy_layout1">
+       <item>
+        <widget class="QLabel" name="posy_label1">
+         <property name="text">
+          <string>Pos Y:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="posy_lcd1">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="time_layout1">
+       <item>
+        <widget class="QLabel" name="time_label1">
+         <property name="text">
+          <string>Tiempo de vuelo:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="time_lcd1">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);</string>
+         </property>
+         <property name="value" stdset="0">
+          <double>0.000000000000000</double>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

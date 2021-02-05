@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGraphicsItem>
 #include <QPainter>
+#include <math.h>
 
 #define G 9.81
 #define v_limit 720
@@ -31,7 +32,7 @@ public: //methods
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
 
     int getAngle() const;
-    int getV0() const;
+    float getV0();
     float getF_time() const;
     float getX() const;
     float getY() const;

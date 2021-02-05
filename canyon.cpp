@@ -295,7 +295,7 @@ std::vector<Shot *> Canyon::generate_counter_offensive_shots(Canyon *defensive_c
                     break;
                 }
 
-                if(sqrt(pow((x_offensive - x_defensive), 2)+pow((y_offensive - y_defensive), 2)) < defensive_canyon->impact_radio) break; //si el proyectil defensivo impacta con el ofensivo
+                if(sqrt(pow((x_offensive - x_defensive), 2)+pow((y_offensive - y_defensive), 2)) < defensive_canyon->getImpact_radio()) break; //si el proyectil defensivo impacta con el ofensivo
 
                 if(flag == 3) break;
 
