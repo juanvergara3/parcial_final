@@ -271,7 +271,7 @@
             <number>100</number>
            </property>
            <property name="maximum">
-            <number>1900</number>
+            <number>1850</number>
            </property>
            <property name="orientation">
             <enum>Qt::Horizontal</enum>

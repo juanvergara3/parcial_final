@@ -10,6 +10,7 @@
 
 #define G 9.81
 #define pi 3.141617
+#define v_limit 720
 
 class Canyon : public QObject, public QGraphicsItem {
     Q_OBJECT
@@ -19,10 +20,12 @@ private: //variables
     float posx, posy;
     float impact_multpliter;
     float impact_radio;
+    float enemy_impact_radio;
     float distance;
 
 public: //methods
     Canyon(float x_, float y_, float imp_);
+    Canyon(float imp_);
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
@@ -39,6 +42,8 @@ public: //methods
 
     float getPosx() const;
     float getPosy() const;
+    void setPosx(float value);
+    void setPosy(float value);
 
     float getDistance() const;
     void setDistance(Canyon *destiny);
@@ -46,6 +51,10 @@ public: //methods
 
     float getImpact_radio() const;
     void setImpact_radio();
+
+    void setEnemy_impact_radio(float value);
+
+    float getImpact_multpliter() const;
 
 private: //methods
 

@@ -1,17 +1,31 @@
 #include "canyon.h"
 
+float Canyon::getImpact_multpliter() const
+{
+    return impact_multpliter;
+}
+
 Canyon::Canyon(float x_, float y_, float imp_) {
     posx = x_;
     posy = y_;
     impact_multpliter = imp_;
+    distance = 100;
+}
+Canyon::Canyon(float imp_) {
+    posx = 0;
+    posy = 0;
+    impact_multpliter = imp_;
+    distance = 100;
 }
 
 QRectF Canyon::boundingRect() const {
-    //return QRectF(-width/2, -height/2, width, height);
+    return QRectF(-5, -5, 10, 10);
 }
 void Canyon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     painter->setBrush(Qt::red);
-    painter->drawEllipse(boundingRect());
+    painter->drawEllipse(boundingRect().center(), distance*enemy_impact_radio, distance*enemy_impact_radio);
+    painter->setBrush(Qt::white);
+    painter->drawRect(boundingRect());
 }
 
 std::vector<Shot *> Canyon::generate_offensive_shots(Canyon *target, bool print) {
@@ -24,7 +38,7 @@ std::vector<Shot *> Canyon::generate_offensive_shots(Canyon *target, bool print)
     float x, y; //posicion del proyectil
     float Vx, Vy; //velocidades en x y y del proyectil
     int V0 = 0; //velocidad inicial del proyectil
-    int t = 0;
+    float t = 0;
     int angle = 1; //angulo del proyectil
 
     for(V0 = 5; ; V0 += 5){ //se va aumentando la velocidad de 5 en 5
@@ -43,7 +57,7 @@ std::vector<Shot *> Canyon::generate_offensive_shots(Canyon *target, bool print)
             x = 0.0;
             y = 0.0;
 
-            for(t = 0; ; t++){ // se aumenta el tiempo de segundo en segundo
+            for(t = 0; ; t += 0.1){ // se aumenta el tiempo de segundo en segundo
 
                 x = posx + Vx*t;
                 y = posy + Vy*t -(0.5*G*t*t);
@@ -53,7 +67,7 @@ std::vector<Shot *> Canyon::generate_offensive_shots(Canyon *target, bool print)
                     if(y<0) //es posible que impacte habiendo pasado un poco del suelo (como si se enterrara, pero me parece mejor que se registre como si hubiera impactado en 0)
                         y = 0;
 
-                    aux.push_back(new Shot(x, y, V0, angle, t)); // si sale un disparo exitoso se añade al vector que de va a retornar
+                    aux.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio)); // si sale un disparo exitoso se añade al vector que de va a retornar
 
                     flag++;
                     V0 += 10; //se usaba para crear disparos que no fueran muy parecidos los unos a los otros, pero es probable que ya no la use
@@ -71,8 +85,8 @@ std::vector<Shot *> Canyon::generate_offensive_shots(Canyon *target, bool print)
         if(flag == 3) break;
 
     }
-    if(print)
-        print_results(aux);
+    //if(print)
+        //print_results(aux);
     return aux;
 }
 std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *target, bool offensive_matters, bool print) {
@@ -125,7 +139,7 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
                         if(y<0)
                             y = 0;
 
-                        shots.push_back(new Shot(x, y, V0, angle, t)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
+                        shots.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
 
                         flag ++;
                         V0 += 10; //se usaba para crear disparos que no fueran muy parecidos los unos a los otros, pero es probable que ya no la use
@@ -190,7 +204,7 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
                         if(y<0)
                             y = 0;
 
-                        shots.push_back(new Shot(x, y, V0, angle, t)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
+                        shots.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
 
                         flag ++;
                         V0 += 10; //se usaba para crear disparos que no fueran muy parecidos los unos a los otros, pero es probable que ya no la use
@@ -276,7 +290,7 @@ std::vector<Shot *> Canyon::generate_counter_offensive_shots(Canyon *defensive_c
                 if(sqrt(pow((x_defensive - x),2)+pow((y_defensive - y), 2)) <= 0.005*distance && sqrt(pow((x_offensive - x),2)+pow((y_offensive - y), 2)) > 0.005*distance){
                     // si destruye el proyectil que queremos destruir pero no destruye el que disparamos originalmente
 
-                    shots.push_back(new Shot(x, y, V0, angle, t)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
+                    shots.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
 
                     flag ++;
                     //V0 += 10; //se usaba para crear disparos que no fueran muy parecidos los unos a los otros, pero es probable que ya no la use
@@ -404,6 +418,18 @@ float Canyon::getPosx() const {
 float Canyon::getPosy() const {
     return posy;
 }
+void Canyon::setPosx(float value) {
+    posx = value;
+
+    setX(posx);
+    //setPos(posx, posy);
+}
+void Canyon::setPosy(float value) {
+    posy = value;
+
+    setY(v_limit - posy);
+    //setPos(posx, posy);
+}
 
 float Canyon::getDistance() const {
     return distance;
@@ -420,4 +446,9 @@ float Canyon::getImpact_radio() const {
 }
 void Canyon::setImpact_radio() {
     impact_radio = impact_multpliter*distance;
+}
+
+void Canyon::setEnemy_impact_radio(float value)
+{
+    enemy_impact_radio = value;
 }
