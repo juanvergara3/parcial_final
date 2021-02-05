@@ -7,7 +7,7 @@ Shot::Shot() {
    angle = 0;
    f_time = 0;
 }
-Shot::Shot(float xi, float yi, float posx, float posy, int vx_, int vy_, int angle_, float final_time, float impact_radio_) {
+Shot::Shot(float xi, float yi, float posx, float posy, float vx_, float vy_, int angle_, float final_time, float impact_radio_) {
     x_i = xi;
     y_i = yi;
     x = posx;
@@ -42,8 +42,9 @@ QRectF Shot::boundingRect() const {
     return QRectF(-2, -2, 4, 4);
 }
 void Shot::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    painter->setBrush(Qt::green);
-    painter->drawEllipse(boundingRect().center(), impact_radio, impact_radio); // radious has to change
+    painter->setPen(QPen(Qt::green,  2, Qt::DotLine));
+    painter->drawEllipse(boundingRect().center(), impact_radio, impact_radio);
+    painter->setPen(QPen());
     painter->setBrush(Qt::blue);
     painter->drawEllipse(boundingRect());
 }
@@ -90,11 +91,11 @@ float Shot::getY_i() const
 {
     return y_i;
 }
-int Shot::getVx() const
+float Shot::getVx() const
 {
     return Vx;
 }
-int Shot::getVy() const
+float Shot::getVy() const
 {
     return Vy;
 }

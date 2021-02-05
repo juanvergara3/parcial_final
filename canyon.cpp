@@ -22,13 +22,14 @@ QRectF Canyon::boundingRect() const {
     return QRectF(-5, -5, 10, 10);
 }
 void Canyon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    painter->setBrush(Qt::red);
+    painter->setPen(QPen(Qt::red,  2, Qt::DashLine));
     painter->drawEllipse(boundingRect().center(), distance*enemy_impact_radio, distance*enemy_impact_radio);
+    painter->setPen(QPen());
     painter->setBrush(Qt::white);
     painter->drawRect(boundingRect());
 }
 
-std::vector<Shot *> Canyon::generate_offensive_shots(Canyon *target, bool print) {
+std::vector<Shot *> Canyon::generate_offensive_shots(Canyon *target) {
     setDistance(target);
     setImpact_radio(); //calcula la distancia al objetivo y en base a eso el radio de impacto
 
@@ -74,7 +75,8 @@ std::vector<Shot *> Canyon::generate_offensive_shots(Canyon *target, bool print)
                     break;
                 }
 
-                if(y < 0) break; // si se pasa del suelo xd
+               // if(y < 0) break; // si se pasa del suelo xd
+                if(y < -1*(this->getImpact_radio()*2)) break;
 
             }
 
@@ -85,11 +87,9 @@ std::vector<Shot *> Canyon::generate_offensive_shots(Canyon *target, bool print)
         if(flag == 3) break;
 
     }
-    //if(print)
-        //print_results(aux);
     return aux;
 }
-std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *target, bool offensive_matters, bool print) {
+std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *target, bool offensive_matters) {
 
     std::vector<Shot *> shots; //para retornar
 
@@ -108,12 +108,13 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
         float x_offensive, y_offensive; //coordenadas del disparo ofensivo
         float Vx_offensive, Vy_offensive; //velocidades en x y y del disparo ofensivo
 
-        int t = 0;
+        float t = 0;
 
-        Vx_offensive = target->getV0()*cos((target->getAngle())*pi/180);
-        Vy_offensive = target->getV0()*sin((target->getAngle())*pi/180);
+        Vx_offensive = target->getVx();
+        Vy_offensive = target->getVy();
 
-        for(V0 = 5; ; V0 += 5){  //se va aumentando la velocidad de 5 en 5
+
+        for(V0 = 50; ; V0 += 1){  //se va aumentando la velocidad de 1 en 1; empieza en 50 para protejer al cañon defensivo
 
             for(angle = 1; angle < 90; angle++){ // se aumenta el  angulo de 1 en 1 hasta que sea 90
 
@@ -125,7 +126,7 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
                 x_offensive = 0.0;
                 y_offensive = 0.0;
 
-                for(t = 0; ; t++){// se aumenta el tiempo de segundo en segundo
+                for(t = 0; ; t+=0.1){// se aumenta el tiempo de segundo en segundo
 
                     x_offensive = origin->getPosx() + Vx_offensive*(t+2);
                     y_offensive = origin->getPosy() + Vy_offensive*(t+2) -(0.5*G*(t+2)*(t+2)); //note que se tienen en cuenta los 2 segundos que tardo la informacion en llegar
@@ -161,11 +162,9 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
         }
 
     }
-
     else{ //cuando el cañon ofensivo no importa, y el cañon defensivo mo comprueba si lo impacta o no
 
         int flag = 0;//para romper los ciclos cuando haye los 3 disparos
-
         float x, y; //coordenas del disparo defensivo
         int V0 = 0; //velocidad inicial del disparo defensivo
         float Vx, Vy; //velocidades en x y y del disparo defensivo
@@ -174,12 +173,12 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
         float x_offensive, y_offensive; //coordenadas del disparo ofensivo
         float Vx_offensive, Vy_offensive; //velocidades en x y y del disparo ofensivo
 
-        int t = 0;
+        float t = 0;
 
-        Vx_offensive = target->getV0()*cos((target->getAngle())*pi/180);
-        Vy_offensive = target->getV0()*sin((target->getAngle())*pi/180);
+        Vx_offensive = target->getVx();
+        Vy_offensive = target->getVy();
 
-        for(V0 = 5; ; V0 += 5){  //se va aumentando la velocidad de 5 en 5
+        for(V0 = 100; ; V0 += 1){  //se va aumentando la velocidad de 1 en 1; empieza en 100 para que el disparo se destruya lejos del cañon defensivo
 
             for(angle = 1; angle < 90; angle++){ // se aumenta el  angulo de 1 en 1 hasta que sea 90
 
@@ -191,13 +190,13 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
                 x_offensive = 0.0;
                 y_offensive = 0.0;
 
-                for(t = 0; ; t++){// se aumenta el tiempo de segundo en segundo
+                for(t = 0; ; t+=0.1){// se aumenta el tiempo de segundo en segundo
 
                     x_offensive = origin->getPosx() + Vx_offensive*(t+2);
-                    y_offensive = origin->getPosy() + Vy_offensive*(t+2) -(0.5*G*(t+2)*(t+2)); //note que se tienen en cuenta los 2 segundos que tardo la informacion en llegar
+                    y_offensive = origin->getPosy() + Vy_offensive*(t+2) - (0.5*G*(t+2)*(t+2)); //note que se tienen en cuenta los 2 segundos que tardo la informacion en llegar
 
                     x = posx + Vx*t;
-                    y = posy + Vy*t -(0.5*G*t*t);
+                    y = posy + Vy*t - (0.5*G*t*t);
 
                     if(sqrt(pow((x_offensive - x),2)+pow((y_offensive - y), 2)) < impact_radio){ //si la distancia entre el proytectil y el destino es menos que el radio de impacto se cuenta como exitoso
 
@@ -211,7 +210,8 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
                         break;
                     }
 
-                    if(y < 0) break; // si se pasa del suelo
+                    //if(y < 0) break; // si se pasa del suelo
+                    if(y < -1*(this->getImpact_radio()*2)) break;
 
                     if(flag == 3) break;
 
@@ -225,8 +225,6 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
 
         }
     }
-    if(print)
-        print_results(shots);
     return shots;
 }
 std::vector<Shot *> Canyon::generate_counter_offensive_shots(Canyon *defensive_canyon, Shot *defensive_shot, Shot *offensive_shot) {
@@ -310,18 +308,15 @@ std::vector<Shot *> Canyon::generate_counter_offensive_shots(Canyon *defensive_c
         if(flag == 3) break;
 
     }
-
-
-    print_results(shots);
     return shots;
 }
 
 bool Canyon::confirm_impact(Canyon *origin, Shot *ofense) {
 
     float x, y; //posicion del proyectil
-    float Vx = 0, Vy = 0; //velocidades en x y y del proyectil
-    int V0 = ofense->getV0(); //velocidad inicial del proyectil
-    int t = 0;
+    float Vx = ofense->getVx(), Vy = ofense->getVy(); //velocidades en x y y del proyectil
+    //int V0 = ofense->getV0(); //velocidad inicial del proyectil
+    float t = 0;
 
 //    if(origin.getPosx() > posx){ //si el origen esta ubicado antes del objetivo
 //        Vx = V0*cos(ofense.getAngle()*pi/180);
@@ -332,21 +327,21 @@ bool Canyon::confirm_impact(Canyon *origin, Shot *ofense) {
 //        Vy = V0*sin((ofense.getAngle()+90)*pi/180);
 //    }
 
-    Vx = V0*cos(ofense->getAngle()*pi/180);
-    Vy = V0*sin(ofense->getAngle()*pi/180);
+    //Vx = V0*cos(ofense->getAngle()*pi/180);
+    //Vy = V0*sin(ofense->getAngle()*pi/180);
 
     origin->setDistance(this);
     origin->setImpact_radio(); //calcula la distancia entre los cañones, y en base a eso el radio de impacto
 
-    for(t = 0; ; t++){ // se aumenta el tiempo de segundo en segundo
+    for(t = 0; ; t += 0.1){ // se aumenta el tiempo de segundo en segundo
 
         x = origin->getPosx() + Vx*t;
         y = origin->getPosy() + Vy*t -(0.5*G*t*t);
 
-        if(sqrt(pow((posx - x), 2)+pow((posy - y), 2)) < origin->getImpact_radio()) //si la distancia entre el proytectil y el destino es menos que el radio de impacto se cuenta como un impacto
+        if(sqrt(pow((posx - x), 2)+pow((posy - y), 2)) < ofense->getImpact_radio()) //si la distancia entre el proytectil y el destino es menos que el radio de impacto se cuenta como un impacto
             return true;
 
-        if(y < -1*(origin->getImpact_radio()*2))
+        if(y < -1*(ofense->getImpact_radio()*2))
             break;
 
     }

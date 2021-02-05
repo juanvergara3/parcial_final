@@ -56,6 +56,20 @@ void MainWindow::print_results(std::vector<Shot *> shots) {
     }
 }
 
+void MainWindow::print_results(Shot *shot) {
+    float dt;
+
+    dt = shot->getF_time()/10;
+
+    for(int w = 1; w < 11; w++)
+        onScreen.push_back(new Shot(shot->getX_i(), shot->getY_i(), shot->getX(), shot->getY(), shot->getVx(), shot->getVy(), shot->getAngle(), dt*w, shot->getImpact_radio()));
+
+    for(auto k = onScreen.begin(); k != onScreen.end(); k++){
+        (*k)->set_end_pos();
+        //scene->addItem(*k);
+    }
+}
+
 void MainWindow::on_punto1_clicked() {
 
     for(auto k = onScreen.begin(); k != onScreen.end(); ){
@@ -66,9 +80,7 @@ void MainWindow::on_punto1_clicked() {
 
     scene->update();
 
-    std::vector<Shot *> shots = offensive->generate_offensive_shots(defensive, false);
-
-    print_results(shots);
+    print_results(offensive->generate_offensive_shots(defensive));
 }
 void MainWindow::on_punto2_clicked() {
 
@@ -80,13 +92,40 @@ void MainWindow::on_punto2_clicked() {
 
     scene->update();
 
-    print_results(defensive->generate_offensive_shots(offensive, false));
+    print_results(defensive->generate_offensive_shots(offensive));
 }
 void MainWindow::on_punto3_clicked() {
+    for(auto k = onScreen.begin(); k != onScreen.end(); ){
+        scene->removeItem(*k);
+        delete (*k);
+        k = onScreen.erase(k);
+    }
 
+    scene->update();
+
+    Shot *s = offensive->generate_offensive_shots(defensive)[0];
+
+    if(defensive->confirm_impact(offensive, s)){
+        print_results(s);
+        print_results(defensive->generate_defensive_shots(offensive, s, false));
+    }
 }
 void MainWindow::on_punto4_clicked() {
 
+    for(auto k = onScreen.begin(); k != onScreen.end(); ){
+        scene->removeItem(*k);
+        delete (*k);
+        k = onScreen.erase(k);
+    }
+
+    scene->update();
+
+    Shot *s = offensive->generate_offensive_shots(defensive)[0];
+
+    if(defensive->confirm_impact(offensive, s)){
+        print_results(s);
+        print_results(defensive->generate_defensive_shots(offensive, s, true));
+    }
 }
 void MainWindow::on_punto5_clicked() {
 

@@ -13,8 +13,8 @@ class Shot : public QObject, public QGraphicsItem {
 public: //variables
     float x_i, y_i;
     float x, y; //posicion del disparo
-    int V0; //velocidad inicial del disparo
-    int Vx, Vy;
+    float V0; //velocidad inicial del disparo
+    float Vx, Vy;
     float f_time; //tiempo final de impacto
     int angle; //angulo inicial del disparo
     float impact_radio; //radio de impacto ya multiplicado por la distancia
@@ -22,7 +22,7 @@ public: //variables
 private: //variables
 
 public: //methods
-    Shot(float xi, float yi, float posx, float posy, int vx_, int vy_, int angle_, float final_time, float impact_radio);
+    Shot(float xi, float yi, float posx, float posy, float vx_, float vy_, int angle_, float final_time, float impact_radio);
     Shot(int velocity, int angle_);
     Shot();
     ~Shot();
@@ -50,9 +50,9 @@ public: //methods
 
     float getY_i() const;
 
-    int getVx() const;
+    float getVx() const;
 
-    int getVy() const;
+    float getVy() const;
 
 private: //methods
 

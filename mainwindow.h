@@ -27,6 +27,7 @@ public: // variables
 
 private: // methods
     void print_results(std::vector<Shot *> shots);
+    void print_results(Shot* shot);
 
 public: // methods
     MainWindow(QWidget *parent = nullptr);
