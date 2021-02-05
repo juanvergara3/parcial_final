@@ -129,6 +129,21 @@ void MainWindow::on_punto4_clicked() {
 }
 void MainWindow::on_punto5_clicked() {
 
+    for(auto k = onScreen.begin(); k != onScreen.end(); ){
+        scene->removeItem(*k);
+        delete (*k);
+        k = onScreen.erase(k);
+    }
+
+    scene->update();
+
+    Shot *of = offensive->generate_offensive_shots(defensive)[0];
+    Shot *def = defensive->generate_defensive_shots(offensive, of, false)[0];
+
+    print_results(of);
+    print_results(def);
+
+    print_results(offensive->generate_counter_offensive_shots(defensive, def, of));
 }
 
 void MainWindow::on_YC1_slider_sliderMoved(int position) {

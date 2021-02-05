@@ -250,17 +250,17 @@ std::vector<Shot *> Canyon::generate_counter_offensive_shots(Canyon *defensive_c
     float x_offensive, y_offensive;  //coordenadas del disparo que dispare inicialmente
     float Vx_offensive, Vy_offensive; //velocidades en x y y del disparo que dispare inicialmente
 
-    int t = 0;
+    float t = 0;
     int d1 = 3; //delay 1
     int d2 = 1; //delay 2
 
-    Vx_defensive = defensive_shot->getV0()*cos((defensive_shot->getAngle()+90)*pi/180);
-    Vy_defensive = defensive_shot->getV0()*sin((defensive_shot->getAngle()+90)*pi/180);
+    Vx_defensive = defensive_shot->getVx();
+    Vy_defensive = defensive_shot->getVy();
 
-    Vx_offensive = offensive_shot->getV0()*cos((offensive_shot->getAngle())*pi/180);
-    Vy_offensive = offensive_shot->getV0()*sin((offensive_shot->getAngle())*pi/180);
+    Vx_offensive = offensive_shot->getVx();
+    Vy_offensive = offensive_shot->getVy();
 
-    for(V0 = 5; ; V0 += 1) {  //se va aumentando la velocidad de 5 en 5
+    for(V0 = 1; ; V0 += 1) {  //se va aumentando la velocidad de 5 en 5
 
         for(angle = 1; angle < 90; angle++) { // se aumenta el  angulo de 1 en 1 hasta que sea 90
 
@@ -274,7 +274,7 @@ std::vector<Shot *> Canyon::generate_counter_offensive_shots(Canyon *defensive_c
             x_offensive = 0.0;
             y_offensive = 0.0;
 
-            for(t = 0; ; t++){// se aumenta el tiempo de segundo en segundo
+            for(t = 0; ; t += 0.1){// se aumenta el tiempo de segundo en segundo
 
                 x_offensive = posx + Vx_offensive*(t+d1);
                 y_offensive = posy + Vy_offensive*(t+d1) - (0.5*G*(t+d1)*(t+d1));  // *** no estoy seguro de los delays ***
@@ -285,7 +285,7 @@ std::vector<Shot *> Canyon::generate_counter_offensive_shots(Canyon *defensive_c
                 x = posx + Vx*t;
                 y = posy + Vy*t - (0.5*G*t*t);
 
-                if(sqrt(pow((x_defensive - x),2)+pow((y_defensive - y), 2)) <= 0.005*distance && sqrt(pow((x_offensive - x),2)+pow((y_offensive - y), 2)) > 0.005*distance){
+                if(sqrt(pow((x_defensive - x),2)+pow((y_defensive - y), 2)) <= impact_radio && sqrt(pow((x_offensive - x),2)+pow((y_offensive - y), 2)) > impact_radio){
                     // si destruye el proyectil que queremos destruir pero no destruye el que disparamos originalmente
 
                     shots.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
