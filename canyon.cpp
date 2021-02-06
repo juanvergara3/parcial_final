@@ -44,6 +44,8 @@ std::vector<Shot *> Canyon::generate_offensive_shots(Canyon *target) {
     float t = 0;
     int angle = 1; //angulo del proyectil
 
+    bool ang;
+
     for(V0 = 5; V0 < 1000; V0 += 5){ //se va aumentando la velocidad de 5 en 5
 
         for(angle = 1; angle < 90; angle++){ // se aumenta el  angulo de 1 en 1 hasta que sea 90
@@ -51,10 +53,12 @@ std::vector<Shot *> Canyon::generate_offensive_shots(Canyon *target) {
             if(posx < target->getPosx()){ //si el cañon esta ubicado antes del objetivo
                 Vx = V0*cos(angle*pi/180);
                 Vy = V0*sin(angle*pi/180);
+                ang = false;
             }
             else if (posx > target->getPosx()){ //si el cañon esta ubicado despues del objetivo
                 Vx = V0*cos((angle+90)*pi/180);
                 Vy = V0*sin((angle+90)*pi/180);
+                ang = true;
             }
 
             x = 0.0;
@@ -70,7 +74,10 @@ std::vector<Shot *> Canyon::generate_offensive_shots(Canyon *target) {
                     if(y<0) //es posible que impacte habiendo pasado un poco del suelo (como si se enterrara, pero me parece mejor que se registre como si hubiera impactado en 0)
                         y = 0;
 
-                    aux.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio, type)); // si sale un disparo exitoso se añade al vector que de va a retornar
+                    if(!ang)
+                        aux.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio, type, true)); // si sale un disparo exitoso se añade al vector que de va a retornar
+                    else
+                        aux.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle+90, t, impact_radio, type, true)); // si sale un disparo exitoso se añade al vector que de va a retornar
 
                     flag++;
                     V0 += 10; //se usaba para crear disparos que no fueran muy parecidos los unos a los otros, pero es probable que ya no la use
@@ -118,10 +125,10 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
 
         for(V0 = 50;  V0 < 1000; V0 += 1){  //se va aumentando la velocidad de 1 en 1; empieza en 50 para protejer al cañon defensivo
 
-            for(angle = 1; angle < 90; angle++){ // se aumenta el  angulo de 1 en 1 hasta que sea 90
+            for(angle = 135; angle < 270; angle++){ // se aumenta el  angulo de 1 en 1 hasta que sea 90
 
-                Vx = V0*cos((angle+90)*pi/180);
-                Vy = V0*sin((angle+90)*pi/180);
+                Vx = V0*cos((angle)*pi/180);
+                Vy = V0*sin((angle)*pi/180);
 
                 x = 0.0;
                 y = 0.0;
@@ -142,10 +149,10 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
                         if(y<0)
                             y = 0;
 
-                        shots.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio, type)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
+                        shots.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio, type, true)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
 
                         flag ++;
-                        V0 += 10; //se usaba para crear disparos que no fueran muy parecidos los unos a los otros, pero es probable que ya no la use
+                        V0 += 5; //se usaba para crear disparos que no fueran muy parecidos los unos a los otros, pero es probable que ya no la use
                         break;
                     }
 
@@ -183,10 +190,10 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
 
         for(V0 = 100; V0 < 1000; V0 += 1){  //se va aumentando la velocidad de 1 en 1; empieza en 100 para que el disparo se destruya lejos del cañon defensivo
 
-            for(angle = 1; angle < 90; angle++){ // se aumenta el  angulo de 1 en 1 hasta que sea 90
+            for(angle = 135; angle < 270; angle++){ // se aumenta el  angulo de 1 en 1 hasta que sea 90
 
-                Vx = V0*cos((angle+90)*pi/180);
-                Vy = V0*sin((angle+90)*pi/180);
+                Vx = V0*cos((angle)*pi/180);
+                Vy = V0*sin((angle)*pi/180);
 
                 x = 0.0;
                 y = 0.0;
@@ -206,7 +213,7 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
                         if(y<0)
                             y = 0;
 
-                        shots.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio, type)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
+                        shots.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio, type, true)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
 
                         flag ++;
                         V0 += 10; //se usaba para crear disparos que no fueran muy parecidos los unos a los otros, pero es probable que ya no la use
@@ -291,7 +298,7 @@ std::vector<Shot *> Canyon::generate_counter_offensive_shots(Canyon *defensive_c
                 if(sqrt(pow((x_defensive - x),2)+pow((y_defensive - y), 2)) <= impact_radio && sqrt(pow((x_offensive - x),2)+pow((y_offensive - y), 2)) > impact_radio){
                     // si destruye el proyectil que queremos destruir pero no destruye el que disparamos originalmente
 
-                    shots.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio, type)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
+                    shots.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio, type, true)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
 
                     flag ++;
                     //V0 += 10; //se usaba para crear disparos que no fueran muy parecidos los unos a los otros, pero es probable que ya no la use

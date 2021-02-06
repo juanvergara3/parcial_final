@@ -22,10 +22,12 @@ public: //variables
 
     std::string type;
 
+    bool radio;
+
 private: //variables
 
 public: //methods
-    Shot(float xi, float yi, float posx, float posy, float vx_, float vy_, int angle_, float final_time, float impact_radio, std::string type);
+    Shot(float xi, float yi, float posx, float posy, float vx_, float vy_, int angle_, float final_time, float impact_radio, std::string type, bool r);
     Shot(int velocity, int angle_, std::string type);
     Shot();
     ~Shot();
@@ -58,6 +60,10 @@ public: //methods
     float getVy() const;
 
     std::string getType() const;
+
+    void setRadio(bool value);
+
+    bool getRadio() const;
 
 private: //methods
 

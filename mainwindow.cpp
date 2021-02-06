@@ -43,10 +43,12 @@ void MainWindow::print_shots(std::vector<Shot *> shots) {
 
     for(auto k = shots.begin(); k != shots.end(); k++){
 
-        dt = (*k)->getF_time()/10;
+        dt = (*k)->getF_time()/ui->principal_box->value();
 
-        for(int w = 1; w < 11; w++){
-            onScreen.push_back(new Shot((*k)->getX_i(), (*k)->getY_i(), (*k)->getX(), (*k)->getY(), (*k)->getVx(), (*k)->getVy(), (*k)->getAngle(), dt*w, (*k)->getImpact_radio(), (*k)->getType()));
+        (*k)->setRadio(ui->r_principal->isChecked());
+
+        for(int w = 1; w < ui->principal_box->value() + 1; w++){
+            onScreen.push_back(new Shot((*k)->getX_i(), (*k)->getY_i(), (*k)->getX(), (*k)->getY(), (*k)->getVx(), (*k)->getVy(), (*k)->getAngle(), dt*w, (*k)->getImpact_radio(), (*k)->getType(), (*k)->getRadio()));
         }
     }
 
@@ -58,10 +60,12 @@ void MainWindow::print_shots(std::vector<Shot *> shots) {
 void MainWindow::add_shot(Shot *shot) {
     float dt;
 
-    dt = shot->getF_time()/10;
+    dt = shot->getF_time()/ui->secundario_box->value();
 
-    for(int w = 1; w < 11; w++)
-        onScreen.push_back(new Shot(shot->getX_i(), shot->getY_i(), shot->getX(), shot->getY(), shot->getVx(), shot->getVy(), shot->getAngle(), dt*w, shot->getImpact_radio(), shot->getType()));
+    shot->setRadio(ui->r_secundario->isChecked());
+
+    for(int w = 1; w < ui->secundario_box->value() + 1 ; w++)
+        onScreen.push_back(new Shot(shot->getX_i(), shot->getY_i(), shot->getX(), shot->getY(), shot->getVx(), shot->getVy(), shot->getAngle(), dt*w, shot->getImpact_radio(), shot->getType(), shot->getRadio()));
 
     for(auto k = onScreen.begin(); k != onScreen.end(); k++){
         (*k)->set_end_pos();

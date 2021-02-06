@@ -7,13 +7,24 @@ Shot::Shot() {
    angle = 0;
    f_time = 0;
    this->type = "";
+   radio = true;
 }
 std::string Shot::getType() const
 {
     return type;
 }
 
-Shot::Shot(float xi, float yi, float posx, float posy, float vx_, float vy_, int angle_, float final_time, float impact_radio_, std::string type) {
+void Shot::setRadio(bool value)
+{
+    radio = value;
+}
+
+bool Shot::getRadio() const
+{
+    return radio;
+}
+
+Shot::Shot(float xi, float yi, float posx, float posy, float vx_, float vy_, int angle_, float final_time, float impact_radio_, std::string type, bool r) {
     x_i = xi;
     y_i = yi;
     x = posx;
@@ -24,6 +35,7 @@ Shot::Shot(float xi, float yi, float posx, float posy, float vx_, float vy_, int
     f_time = final_time;
     impact_radio = impact_radio_;
     this->type = type;
+    radio = r;
 }
 Shot::Shot(int velocity, int angle_, std::string type) {
     V0 = velocity;
@@ -39,15 +51,22 @@ QRectF Shot::boundingRect() const {
 }
 void Shot::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
 
-    if(type == "d")
-        painter->setPen(QPen(Qt::green,  2, Qt::DotLine));
-    else if(type == "o")
+    if(radio){
+        if(type == "d")
+            painter->setPen(QPen(Qt::green,  2, Qt::DotLine));
+        else if(type == "o")
+            painter->setPen(QPen(Qt::red,  2, Qt::DotLine));
 
-        painter->setPen(QPen(Qt::red,  2, Qt::DotLine));
+        painter->drawEllipse(boundingRect().center(), impact_radio, impact_radio);
+    }
 
-    painter->drawEllipse(boundingRect().center(), impact_radio, impact_radio);
     painter->setPen(QPen());
-    painter->setBrush(Qt::black);
+
+    if(type == "d")
+        painter->setBrush(Qt::green);
+    else if(type == "o")
+        painter->setBrush(Qt::red);
+
     painter->drawEllipse(boundingRect());
 }
 
