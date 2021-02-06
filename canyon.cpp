@@ -84,7 +84,6 @@ std::vector<Shot *> Canyon::generate_offensive_shots(Canyon *target) {
                     break;
                 }
 
-               // if(y < 0) break; // si se pasa del suelo xd
                 if(y < -1*(this->getImpact_radio()*2)) break;
 
             }
@@ -156,7 +155,6 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
                         break;
                     }
 
-                    //if(y < 0) break; // si se pasa del suelo
                     if(y < -1*(this->getImpact_radio()*2)) break;
 
                     if(flag == 3) break;
@@ -220,7 +218,6 @@ std::vector<Shot *> Canyon::generate_defensive_shots(Canyon *origin, Shot *targe
                         break;
                     }
 
-                    //if(y < 0) break; // si se pasa del suelo
                     if(y < -1*(this->getImpact_radio()*2)) break;
 
                     if(flag == 3) break;
@@ -301,7 +298,6 @@ std::vector<Shot *> Canyon::generate_counter_offensive_shots(Canyon *defensive_c
                     shots.push_back(new Shot(posx, posy, x, y, Vx, Vy, angle, t, impact_radio, type, true)); // si sale un disparo exitoso se añade al vector que de va a retornar (se toma le tiempo desde que se dispara*)
 
                     flag ++;
-                    //V0 += 10; //se usaba para crear disparos que no fueran muy parecidos los unos a los otros, pero es probable que ya no la use
                     break;
                 }
 
@@ -328,20 +324,7 @@ bool Canyon::confirm_impact(Canyon *origin, Shot *ofense) {
 
     float x, y; //posicion del proyectil
     float Vx = ofense->getVx(), Vy = ofense->getVy(); //velocidades en x y y del proyectil
-    //int V0 = ofense->getV0(); //velocidad inicial del proyectil
     float t = 0;
-
-//    if(origin.getPosx() > posx){ //si el origen esta ubicado antes del objetivo
-//        Vx = V0*cos(ofense.getAngle()*pi/180);
-//        Vy = V0*sin(ofense.getAngle()*pi/180);
-//    }
-//    else if (origin.getPosx() < posx){ //si el origen esta ubicado despues del objetivo
-//        Vx = V0*cos((ofense.getAngle()+90)*pi/180);
-//        Vy = V0*sin((ofense.getAngle()+90)*pi/180);
-//    }
-
-    //Vx = V0*cos(ofense->getAngle()*pi/180);
-    //Vy = V0*sin(ofense->getAngle()*pi/180);
 
     origin->setDistance(this);
     origin->setImpact_radio(); //calcula la distancia entre los cañones, y en base a eso el radio de impacto
@@ -408,13 +391,11 @@ void Canyon::setPosx(float value) {
     posx = value;
 
     setX(posx);
-    //setPos(posx, posy);
 }
 void Canyon::setPosy(float value) {
     posy = value;
 
     setY(v_limit - posy);
-    //setPos(posx, posy);
 }
 
 float Canyon::getDistance() const {

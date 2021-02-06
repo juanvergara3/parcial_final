@@ -69,7 +69,6 @@ void MainWindow::add_shot(Shot *shot) {
 
     for(auto k = onScreen.begin(); k != onScreen.end(); k++){
         (*k)->set_end_pos();
-        //scene->addItem(*k);
     }
 }
 void MainWindow::display_shots(std::vector<Shot *> shots) {

@@ -9,21 +9,6 @@ Shot::Shot() {
    this->type = "";
    radio = true;
 }
-std::string Shot::getType() const
-{
-    return type;
-}
-
-void Shot::setRadio(bool value)
-{
-    radio = value;
-}
-
-bool Shot::getRadio() const
-{
-    return radio;
-}
-
 Shot::Shot(float xi, float yi, float posx, float posy, float vx_, float vy_, int angle_, float final_time, float impact_radio_, std::string type, bool r) {
     x_i = xi;
     y_i = yi;
@@ -135,3 +120,19 @@ float Shot::getVy() const
 {
     return Vy;
 }
+
+std::string Shot::getType() const
+{
+    return type;
+}
+
+void Shot::setRadio(bool value)
+{
+    radio = value;
+}
+
+bool Shot::getRadio() const
+{
+    return radio;
+}
+
